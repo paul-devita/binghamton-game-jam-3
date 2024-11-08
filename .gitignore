@@ -20,7 +20,7 @@
 /[Aa]ssets/Plugins/Editor/JetBrains*
 
 # Jetbrains Rider Folder
-/.idea/
+.idea/
 
 # Gradle cache directory
 .gradle/
