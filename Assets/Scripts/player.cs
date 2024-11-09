@@ -213,7 +213,7 @@ public class player : MonoBehaviour
             {
                 case POPPED_KERNELS_TAG:
                 {
-                    const float POPPED_KERNEL_PUSH_SPEED = 35f;
+                    const float POPPED_KERNEL_PUSH_SPEED = 1f;
 
                     Rigidbody2D rb2D = collision.gameObject.GetComponentInParent<Rigidbody2D>();
 
@@ -235,11 +235,6 @@ public class player : MonoBehaviour
                 }
             }
         }
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        
     }
 
     // rotates the player during the dash animation
