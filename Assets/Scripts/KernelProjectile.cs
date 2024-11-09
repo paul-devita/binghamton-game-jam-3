@@ -38,8 +38,12 @@ public class KernelProjectile : MonoBehaviour
                 break;
             }
             case ACTION_DASH:
-
+            {
+                float xVelocity = KERNEL_SPEED * (isFacingRight ? -1f : 1f);
+                
+                
                 break;
+            }
             default:
                 Debug.LogWarning("invalid action type passed to kernel object");
                 Destroy(gameObject);
