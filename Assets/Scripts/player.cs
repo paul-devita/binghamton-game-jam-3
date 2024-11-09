@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class player : MonoBehaviour
 {
+
+    // CONSTANTS
     private const float GROUNDCHECK_RADIUS = 0.2f;
 
-    private const ushort DEFAULT_KERNEL_COUNT = 12;
+    private const ushort DEFAULT_KERNEL_COUNT = 1000;
     private const float DOUBLE_JUMP_KERNEL_MULTIPLIER = 0.275f;
     private const float DASH_POWER_KERNEL_MULTIPLIER = 0.25f;
     private const float DASH_TIME_KERNEL_MULTIPLIER = 0.1f;
@@ -18,7 +20,7 @@ public class player : MonoBehaviour
     private const float SPEED = 8f;
 
     private const float DASH_POWER = 24f;
-    private const float DASH_COOLDOWN = 2f;
+    private const float DASH_COOLDOWN = 0f;
     private const float DASH_TIME = 0.3f;
 
     private const ushort MAX_KERNEL_USAGE = 3;
@@ -27,9 +29,8 @@ public class player : MonoBehaviour
     private const byte ACTION_JUMP = 0;
     private const byte ACTION_DASH = 1;
 
-    [SerializeField] private ushort _kernelCount;
-    [SerializeField] private ushort _kernelsInUse;
     
+    // general vars
     private float _horizontalInput;
 
     private bool _isFacingRight = true;
@@ -41,6 +42,8 @@ public class player : MonoBehaviour
     
     private bool _isStationary = true;
 
+
+    // serialize fields
     [SerializeField] private Rigidbody2D _rigidbody2D;
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private LayerMask _groundLayer;
@@ -48,7 +51,11 @@ public class player : MonoBehaviour
 
     [SerializeField] private Transform _kernalProjectileSpawnLocation;
     [SerializeField] private GameObject _kernelProjectile;
+
+    [SerializeField] private ushort _kernelCount;
+    [SerializeField] private ushort _kernelsInUse;
     
+
     void Start()
     {
         _kernelCount = DEFAULT_KERNEL_COUNT;
@@ -79,6 +86,7 @@ public class player : MonoBehaviour
         {
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, JUMPING_POWER);
             _canDoubleJump = true;
+
             _animator.SetBool("is jumping", true);
         }
         if (Input.GetButtonUp("Jump") && _rigidbody2D.velocity.y > 0f)
@@ -89,6 +97,8 @@ public class player : MonoBehaviour
         //Double Jump Behavior
         if (Input.GetButtonDown("Jump") && !isGrounded() && _canDoubleJump && _kernelCount > _kernelsInUse)
         {
+            _animator.SetBool("is surprised", true);
+
             _canDoubleJump = false;
 
             _kernelCount -= _kernelsInUse;
@@ -103,12 +113,15 @@ public class player : MonoBehaviour
         //Dashing Behavior
         if (Input.GetKeyDown(KeyCode.LeftShift) && _canDash && !isGrounded() && _kernelCount > _kernelsInUse)
         {
+            _animator.SetBool("is surprised", true);
             StartCoroutine(dash());
         }
         
         changeDirection();
     }
 
+
+    // physics calculation calls (called at regular interval)
     private void FixedUpdate()
     {
         if (_isDashing) return;
@@ -119,11 +132,13 @@ public class player : MonoBehaviour
         _animator.SetFloat("y velocity", _rigidbody2D.velocity.y);
     }
 
+    // returns if the player is grounded or not based on hitbox
     private bool isGrounded()
     {
         return Physics2D.OverlapCircle(_groundCheck.position, GROUNDCHECK_RADIUS, _groundLayer);
     }
     
+    // flips the player direction based on user input (also flips sprites)
     private void changeDirection()
     {
         if (_isFacingRight && _horizontalInput < 0f || !_isFacingRight && _horizontalInput > 0f)
@@ -137,6 +152,7 @@ public class player : MonoBehaviour
         }
     }
 
+    // creates a kernel projectile with an action and direction
     private void createKernelProjectile(byte action, bool isFacingRight)
     {
         GameObject kernel = GameObject.Instantiate(_kernelProjectile);
@@ -149,6 +165,7 @@ public class player : MonoBehaviour
         kernelProjectile.actionType = action;
     }
 
+    // player dash. rotates player and shoots kernals
     private IEnumerator dash()
     {
         float oldGravity = _rigidbody2D.gravityScale;
@@ -177,11 +194,15 @@ public class player : MonoBehaviour
         _canDash = true;
     }
 
+
+    // called when player trigger collides with an object. Player trigger is currently the capsule 2D collider
     private void OnTriggerEnter2D(Collider2D collision) 
     {
         _animator.SetBool("is jumping", false);
+        _animator.SetBool("is surprised", false);
     }
     
+    // rotates the player during the dash animation
     private IEnumerator dashRotation(float duration)
     {
         for (float t = 0f; t < duration; t += Time.deltaTime)
