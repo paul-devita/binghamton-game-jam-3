@@ -29,6 +29,9 @@ public class player : MonoBehaviour
     private const byte ACTION_JUMP = 0;
     private const byte ACTION_DASH = 1;
 
+    private const string POPPED_KERNELS_TAG = "poppedKernel";
+    private const string PICKUP_KERNELS_TAG = "pickupKernel";
+
     
     // general vars
     private float _horizontalInput;
@@ -51,6 +54,7 @@ public class player : MonoBehaviour
 
     [SerializeField] private Transform _kernalProjectileSpawnLocation;
     [SerializeField] private GameObject _kernelProjectile;
+    [SerializeField] private LayerMask _placedObjectsLayer;
 
     [SerializeField] private ushort _kernelCount;
     [SerializeField] private ushort _kernelsInUse;
@@ -196,12 +200,48 @@ public class player : MonoBehaviour
 
 
     // called when player trigger collides with an object. Player trigger is currently the capsule 2D collider
-    private void OnTriggerEnter2D(Collider2D collision) 
+    void OnTriggerEnter2D(Collider2D collision) 
     {
-        _animator.SetBool("is jumping", false);
-        _animator.SetBool("is surprised", false);
+        if (collision.gameObject.layer == (int) Mathf.Log(_groundLayer, 2f))
+        {
+            _animator.SetBool("is jumping", false);
+            _animator.SetBool("is surprised", false);
+        }
+        else if(collision.gameObject.layer == (int) Mathf.Log(_placedObjectsLayer, 2f))
+        {
+            switch (collision.gameObject.tag)
+            {
+                case POPPED_KERNELS_TAG:
+                {
+                    const float POPPED_KERNEL_PUSH_SPEED = 35f;
+
+                    Rigidbody2D rb2D = collision.gameObject.GetComponentInParent<Rigidbody2D>();
+
+                    rb2D.velocity = new Vector2(POPPED_KERNEL_PUSH_SPEED * (_isFacingRight ? 1f : -1f),
+                        rb2D.velocity.y);
+                    
+                    break;
+                }
+                case PICKUP_KERNELS_TAG:
+                {
+                    GameObject obj = collision.gameObject;
+                    
+                    if(_kernelCount < DEFAULT_KERNEL_COUNT)
+                        _kernelCount++;
+
+                    Destroy(obj);
+                    
+                    break;
+                }
+            }
+        }
     }
-    
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        
+    }
+
     // rotates the player during the dash animation
     private IEnumerator dashRotation(float duration)
     {
