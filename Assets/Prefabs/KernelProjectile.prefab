@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7205490530340368789}
   - component: {fileID: 400262116995408778}
   - component: {fileID: 5742572033558911724}
+  - component: {fileID: -6596457612544279428}
   m_Layer: 7
   m_Name: KernelProjectile
   m_TagString: Untagged
@@ -165,3 +166,24 @@ MonoBehaviour:
   isFacingRight: 0
   _rigidbody2D: {fileID: 7205490530340368789}
   _kernelPlacedObject: {fileID: 6589047364458976850, guid: 82de9f202c762ee41aa9e4530d5185e5, type: 3}
+--- !u!95 &-6596457612544279428
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6370199327447000460}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7f9043985fb9f374fafb466a236e430b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
