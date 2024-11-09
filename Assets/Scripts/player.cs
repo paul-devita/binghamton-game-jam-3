@@ -86,7 +86,8 @@ public class player : MonoBehaviour
         {
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, JUMPING_POWER);
             _canDoubleJump = true;
-           _animator.SetBool("is jumping", true);
+
+            _animator.SetBool("is jumping", true);
         }
         if (Input.GetButtonUp("Jump") && _rigidbody2D.velocity.y > 0f)
         {
@@ -127,8 +128,8 @@ public class player : MonoBehaviour
         
         _rigidbody2D.velocity = new Vector2(_horizontalInput * SPEED, _rigidbody2D.velocity.y);
         
-       _animator.SetFloat("x velocity", Math.Abs(_rigidbody2D.velocity.x));
-       _animator.SetFloat("y velocity", _rigidbody2D.velocity.y);
+        _animator.SetFloat("x velocity", Math.Abs(_rigidbody2D.velocity.x));
+        _animator.SetFloat("y velocity", _rigidbody2D.velocity.y);
     }
 
     // returns if the player is grounded or not based on hitbox
@@ -197,8 +198,8 @@ public class player : MonoBehaviour
     // called when player trigger collides with an object. Player trigger is currently the capsule 2D collider
     private void OnTriggerEnter2D(Collider2D collision) 
     {
-       _animator.SetBool("is jumping", false);
-       _animator.SetBool("is surprised", false);
+        _animator.SetBool("is jumping", false);
+        _animator.SetBool("is surprised", false);
     }
     
     // rotates the player during the dash animation
