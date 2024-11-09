@@ -24,6 +24,9 @@ public class player : MonoBehaviour
     private const ushort MAX_KERNEL_USAGE = 3;
     private const ushort MIN_KERNEL_USAGE = 1;
 
+    private const byte ACTION_JUMP = 0;
+    private const byte ACTION_DASH = 1;
+
     [SerializeField] private ushort _kernelCount;
     [SerializeField] private ushort _kernelsInUse;
     
@@ -41,14 +44,16 @@ public class player : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidbody2D;
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private LayerMask _groundLayer;
+    [SerializeField] private Animator _animator;
 
-    Animator animator;
+    [SerializeField] private Transform _kernalProjectileSpawnLocation;
+    [SerializeField] private GameObject _kernelProjectile;
     
     void Start()
     {
         _kernelCount = DEFAULT_KERNEL_COUNT;
         _kernelsInUse = 1;
-        animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
     }
 
     
@@ -76,19 +81,23 @@ public class player : MonoBehaviour
             _canDoubleJump = true;
             animator.SetBool("is jumping", true);
         }
+        if (Input.GetButtonUp("Jump") && _rigidbody2D.velocity.y > 0f)
+        {
+            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _rigidbody2D.velocity.y * 0.5f);
+        }
+        
+        //Double Jump Behavior
         if (Input.GetButtonDown("Jump") && !isGrounded() && _canDoubleJump && _kernelCount > _kernelsInUse)
         {
             _canDoubleJump = false;
 
             _kernelCount -= _kernelsInUse;
+            
+            for(int i = 0; i < _kernelsInUse; i++)
+                createKernelProjectile(ACTION_JUMP, _isFacingRight);
 
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x,
                 DOUBLE_JUMP_BASE_POWER * (1f + (_kernelsInUse - 1) * DOUBLE_JUMP_KERNEL_MULTIPLIER));
-        }
-
-        if (Input.GetButtonUp("Jump") && _rigidbody2D.velocity.y > 0f)
-        {
-            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, _rigidbody2D.velocity.y * 0.5f);
         }
 
         //Dashing Behavior
@@ -128,6 +137,18 @@ public class player : MonoBehaviour
         }
     }
 
+    private void createKernelProjectile(byte action, bool isFacingRight)
+    {
+        GameObject kernel = GameObject.Instantiate(_kernelProjectile);
+
+        kernel.transform.position = _kernalProjectileSpawnLocation.position;
+
+        KernelProjectile kernelProjectile = kernel.GetComponent<KernelProjectile>();
+
+        kernelProjectile.isFacingRight = isFacingRight;
+        kernelProjectile.actionType = action;
+    }
+
     private IEnumerator dash()
     {
         float oldGravity = _rigidbody2D.gravityScale;
@@ -137,6 +158,9 @@ public class player : MonoBehaviour
         _isDashing = true;
 
         _kernelCount -= _kernelsInUse;
+        
+        for(int i = 0; i < _kernelsInUse; i++)
+            createKernelProjectile(ACTION_DASH, _isFacingRight);
         
         _rigidbody2D.gravityScale = 0f;
         _rigidbody2D.velocity = new Vector2(transform.localScale.x * (DASH_POWER * (1 + (_kernelsInUse - 1) * DASH_POWER_KERNEL_MULTIPLIER)), 0f);
@@ -156,7 +180,6 @@ public class player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision) 
     {
         animator.SetBool("is jumping", false);
-        Debug.Log("a");
     }
     
     private IEnumerator dashRotation(float duration)
