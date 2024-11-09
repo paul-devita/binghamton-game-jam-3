@@ -3,24 +3,26 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - poppedKernel
+  - pickupKernel
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - player
   - Water
   - UI
-  - ground
+  - 
+  - 
+  - placedObjects
+  - 
+  - 
+  - 
   - projectile
   - player
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - ground
   - 
   - 
   - 

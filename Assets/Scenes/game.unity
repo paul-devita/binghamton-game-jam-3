@@ -131,7 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 522819823}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: projectileSpawnLocation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 977847387}
   - component: {fileID: 977847386}
   - component: {fileID: 977847392}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -283,10 +283,13 @@ MonoBehaviour:
   _groundCheck: {fileID: 1637955066}
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 32768
   _animator: {fileID: 977847391}
   _kernalProjectileSpawnLocation: {fileID: 522819823}
   _kernelProjectile: {fileID: 6370199327447000460, guid: 3ce220e79b840284c82ec2be64e3ac9f, type: 3}
+  _placedObjectsLayer:
+    serializedVersion: 2
+    m_Bits: 256
   _kernelCount: 0
   _kernelsInUse: 0
 --- !u!61 &977847387
@@ -497,7 +500,7 @@ GameObject:
   - component: {fileID: 1492039209}
   - component: {fileID: 1492039208}
   - component: {fileID: 1492039207}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -513,7 +516,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1492039206}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 120392ae749150047b86ae74cda711ce, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -686,7 +689,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1637955066}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: groundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}

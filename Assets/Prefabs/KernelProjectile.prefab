@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 400262116995408778}
   - component: {fileID: 5742572033558911724}
   - component: {fileID: -6596457612544279428}
-  m_Layer: 7
+  m_Layer: 12
   m_Name: KernelProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -165,6 +165,9 @@ MonoBehaviour:
   actionType: 0
   isFacingRight: 0
   _rigidbody2D: {fileID: 7205490530340368789}
+  _groundLayer:
+    serializedVersion: 2
+    m_Bits: 32768
   _kernelPlacedObject: {fileID: 6589047364458976850, guid: 82de9f202c762ee41aa9e4530d5185e5, type: 3}
 --- !u!95 &-6596457612544279428
 Animator:
