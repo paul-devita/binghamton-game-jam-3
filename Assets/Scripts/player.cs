@@ -79,6 +79,7 @@ public class player : MonoBehaviour
         {
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, JUMPING_POWER);
             _canDoubleJump = true;
+            animator.SetBool("is jumping", true);
         }
         if (Input.GetButtonUp("Jump") && _rigidbody2D.velocity.y > 0f)
         {
@@ -114,7 +115,8 @@ public class player : MonoBehaviour
         
         _rigidbody2D.velocity = new Vector2(_horizontalInput * SPEED, _rigidbody2D.velocity.y);
         
-        _animator.SetFloat("x velocity", Math.Abs(_rigidbody2D.velocity.x));
+        animator.SetFloat("x velocity", Math.Abs(_rigidbody2D.velocity.x));
+        animator.SetFloat("y velocity", _rigidbody2D.velocity.y);
     }
 
     private bool isGrounded()
@@ -175,6 +177,11 @@ public class player : MonoBehaviour
         _canDash = true;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision) 
+    {
+        animator.SetBool("is jumping", false);
+    }
+    
     private IEnumerator dashRotation(float duration)
     {
         for (float t = 0f; t < duration; t += Time.deltaTime)

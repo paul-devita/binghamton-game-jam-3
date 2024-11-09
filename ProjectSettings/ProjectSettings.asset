@@ -707,11 +707,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: a24083f1-2c9a-4325-8a50-f2ce4adc8c5c
+  cloudProjectId: 3eff797a-fa93-4708-b547-fafa30e80fcd
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: binghamton-game-jam-3
-  organizationId: ativedluap
+  projectName: Game Jam 2024 2024-11-09_00-43-50
+  organizationId: johngamenight
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
