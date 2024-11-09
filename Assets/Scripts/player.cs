@@ -19,7 +19,7 @@ public class player : MonoBehaviour
 
     private const float DASH_POWER = 24f;
     private const float DASH_COOLDOWN = 2f;
-    private const float DASH_TIME = 0.15f;
+    private const float DASH_TIME = 0.3f;
 
     private const ushort MAX_KERNEL_USAGE = 3;
     private const ushort MIN_KERNEL_USAGE = 1;
@@ -105,6 +105,7 @@ public class player : MonoBehaviour
         if (_isDashing) return;
         
         _rigidbody2D.velocity = new Vector2(_horizontalInput * SPEED, _rigidbody2D.velocity.y);
+        
         animator.SetFloat("x velocity", Math.Abs(_rigidbody2D.velocity.x));
         animator.SetFloat("y velocity", _rigidbody2D.velocity.y);
     }
@@ -125,27 +126,24 @@ public class player : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
-        else if (_horizontalInput == 0f)
-        {
-            _isStationary = true;
-        }
     }
 
     private IEnumerator dash()
     {
+        float oldGravity = _rigidbody2D.gravityScale;
+        float dashDuration = DASH_TIME * (1 + (_kernelsInUse - 1) * DASH_TIME_KERNEL_MULTIPLIER);
+        
         _canDash = false;
         _isDashing = true;
 
         _kernelCount -= _kernelsInUse;
-
-        float oldGravity = _rigidbody2D.gravityScale;
+        
         _rigidbody2D.gravityScale = 0f;
         _rigidbody2D.velocity = new Vector2(transform.localScale.x * (DASH_POWER * (1 + (_kernelsInUse - 1) * DASH_POWER_KERNEL_MULTIPLIER)), 0f);
 
-        transform.eulerAngles = new Vector3(transform.localRotation.x, transform.localRotation.y,
-            90 * (_isFacingRight ? 1 : -1));
+        StartCoroutine(dashRotation(dashDuration));
         
-        yield return new WaitForSeconds(DASH_TIME * (1 + (_kernelsInUse - 1) * DASH_TIME_KERNEL_MULTIPLIER));
+        yield return new WaitForSeconds(dashDuration);
 
         _isDashing = false;
         _rigidbody2D.gravityScale = oldGravity;
@@ -159,5 +157,18 @@ public class player : MonoBehaviour
     {
         animator.SetBool("is jumping", false);
         Debug.Log("a");
+    }
+    
+    private IEnumerator dashRotation(float duration)
+    {
+        for (float t = 0f; t < duration; t += Time.deltaTime)
+        {
+            float newZ = Mathf.Lerp(0, 360, t / duration);
+
+            transform.eulerAngles = new Vector3(transform.localRotation.x, transform.localRotation.y,
+                newZ * (_isFacingRight ? -1 : 1));
+
+            yield return null;
+        }
     }
 }
