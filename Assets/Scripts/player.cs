@@ -41,11 +41,14 @@ public class player : MonoBehaviour
     [SerializeField] private Rigidbody2D _rigidbody2D;
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private LayerMask _groundLayer;
+
+    Animator animator;
     
     void Start()
     {
         _kernelCount = DEFAULT_KERNEL_COUNT;
         _kernelsInUse = 1;
+        animator = GetComponent<Animator>();
     }
 
     
@@ -101,6 +104,7 @@ public class player : MonoBehaviour
         if (_isDashing) return;
         
         _rigidbody2D.velocity = new Vector2(_horizontalInput * SPEED, _rigidbody2D.velocity.y);
+        animator.SetFloat("x velocity", Math.Abs(_rigidbody2D.velocity.x));
     }
 
     private bool isGrounded()
@@ -135,10 +139,15 @@ public class player : MonoBehaviour
         float oldGravity = _rigidbody2D.gravityScale;
         _rigidbody2D.gravityScale = 0f;
         _rigidbody2D.velocity = new Vector2(transform.localScale.x * (DASH_POWER * (1 + (_kernelsInUse - 1) * DASH_POWER_KERNEL_MULTIPLIER)), 0f);
+
+        transform.eulerAngles = new Vector3(transform.localRotation.x, transform.localRotation.y,
+            90 * (_isFacingRight ? 1 : -1));
+        
         yield return new WaitForSeconds(DASH_TIME * (1 + (_kernelsInUse - 1) * DASH_TIME_KERNEL_MULTIPLIER));
 
         _isDashing = false;
         _rigidbody2D.gravityScale = oldGravity;
+        transform.eulerAngles = Vector3.zero;
         yield return new WaitForSeconds(DASH_COOLDOWN);
 
         _canDash = true;
