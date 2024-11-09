@@ -131,7 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 522819823}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: projectileSpawnLocation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 977847387}
   - component: {fileID: 977847386}
   - component: {fileID: 977847392}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,16 +279,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b231b800acf384c97174edf84c250b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _kernelCount: 0
-  _kernelsInUse: 0
   _rigidbody2D: {fileID: 977847388}
   _groundCheck: {fileID: 1637955066}
   _groundLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 32768
   _animator: {fileID: 977847391}
   _kernalProjectileSpawnLocation: {fileID: 522819823}
   _kernelProjectile: {fileID: 6370199327447000460, guid: 3ce220e79b840284c82ec2be64e3ac9f, type: 3}
+  _placedObjectsLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  _kernelCount: 0
+  _kernelsInUse: 0
 --- !u!61 &977847387
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -497,7 +500,7 @@ GameObject:
   - component: {fileID: 1492039209}
   - component: {fileID: 1492039208}
   - component: {fileID: 1492039207}
-  m_Layer: 6
+  m_Layer: 15
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -625,7 +628,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1637955066}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: groundCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
