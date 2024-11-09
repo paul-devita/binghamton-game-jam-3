@@ -14,10 +14,10 @@ public class player : MonoBehaviour
     private const float DASH_POWER_KERNEL_MULTIPLIER = 0.25f;
     private const float DASH_TIME_KERNEL_MULTIPLIER = 0.1f;
     
-    private const float JUMPING_POWER = 16f;
-    private const float DOUBLE_JUMP_BASE_POWER = 10f;
+    private const float JUMPING_POWER = 24f;
+    private const float DOUBLE_JUMP_BASE_POWER = 15f;
     
-    private const float SPEED = 8f;
+    private const float SPEED = 14f;
 
     private const float DASH_POWER = 24f;
     private const float DASH_COOLDOWN = 0f;
