@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6992831890623982776}
   - component: {fileID: 6420156042055593404}
   - component: {fileID: 2073900946531129696}
+  - component: {fileID: 5636233560040488178}
   m_Layer: 15
   m_Name: leaf 2
   m_TagString: Untagged
@@ -118,7 +119,7 @@ BoxCollider2D:
     serializedVersion: 2
     m_Bits: 4294967295
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0.91, y: -0.06}
   m_SpriteTilingProperty:
@@ -202,3 +203,22 @@ CapsuleCollider2D:
   m_Offset: {x: 0.93, y: 0.16}
   m_Size: {x: 7.85, y: 0.46}
   m_Direction: 1
+--- !u!251 &5636233560040488178
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7692481041861558939}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RotationalOffset: 0
+  m_UseOneWay: 1
+  m_UseOneWayGrouping: 0
+  m_SurfaceArc: 150
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1
