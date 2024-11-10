@@ -48,6 +48,8 @@ public class player : MonoBehaviour
     private bool _isDashing = false;
     private bool _canDash = true;
 
+    private bool _isDead;
+
 
     // serialize fields
     [SerializeField] private Rigidbody2D _rigidbody2D;
@@ -85,6 +87,9 @@ public class player : MonoBehaviour
     
     void Update()
     {
+        
+        
+        
         if (_isDashing) return;
         
         //Get Horizontal Input
