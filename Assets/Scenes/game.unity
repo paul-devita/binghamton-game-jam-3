@@ -2953,6 +2953,14 @@ PrefabInstance:
       propertyPath: _kernelDamage
       value: 
       objectReference: {fileID: 21300000, guid: 317e3860047d9344fa1e8db63dd903bf, type: 3}
+    - target: {fileID: 938177586726205743, guid: 44de9914f4478c6428fcaf796a64eea5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -139
+      objectReference: {fileID: 0}
+    - target: {fileID: 938177586726205743, guid: 44de9914f4478c6428fcaf796a64eea5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 201
+      objectReference: {fileID: 0}
     - target: {fileID: 1460698577458095339, guid: 44de9914f4478c6428fcaf796a64eea5, type: 3}
       propertyPath: m_Camera
       value: 
@@ -2960,6 +2968,10 @@ PrefabInstance:
     - target: {fileID: 1460698577458095339, guid: 44de9914f4478c6428fcaf796a64eea5, type: 3}
       propertyPath: m_RenderMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1832954215752846391, guid: 44de9914f4478c6428fcaf796a64eea5, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4889792905926192595, guid: 44de9914f4478c6428fcaf796a64eea5, type: 3}
       propertyPath: m_LocalPosition.x
