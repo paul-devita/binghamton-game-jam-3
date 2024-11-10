@@ -113,13 +113,6 @@ public class UI : MonoBehaviour
                 _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDanger;
             }
         }
-        else if (updatedUI)
-        {
-            for (int i = childCount - kernelsInUse; i < childCount; i++)
-            {
-                _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelSelected;
-            }
-        }
         else if (_kernelsInUse != kernelsInUse)
         {
             for (int i = 0; i < _kernelBar.transform.childCount; i++)
@@ -131,8 +124,15 @@ public class UI : MonoBehaviour
             {
                 _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelSelected;
             }
-            
-            _kernelsInUse = kernelsInUse;
         }
+        else if (updatedUI)
+        {
+            for (int i = childCount - kernelsInUse; i < childCount; i++)
+            {
+                _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelSelected;
+            }
+        }
+        
+        _kernelsInUse = kernelsInUse;
     }
 }
