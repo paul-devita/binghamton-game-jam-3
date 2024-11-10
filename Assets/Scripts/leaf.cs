@@ -20,7 +20,9 @@ public class leaf : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player" && other.gameObject.transform.position.y - other.gameObject.transform.localScale.y / 2.0f > gameObject.transform.position.y)
+        if (other.gameObject.tag == "Player"
+         && other.gameObject.transform.position.y - other.gameObject.transform.localScale.y / 2.0f > gameObject.transform.position.y
+         && other.gameObject.transform.GetComponent<Rigidbody2D>().velocity.y < 0)
         {
             _animator.SetBool("holding player", true);
         }
