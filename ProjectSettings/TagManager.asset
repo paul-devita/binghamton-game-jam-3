@@ -44,6 +44,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: stem 2
+    uniqueID: 262194135
+    locked: 0
   - name: locusts
     uniqueID: 2010762723
     locked: 0

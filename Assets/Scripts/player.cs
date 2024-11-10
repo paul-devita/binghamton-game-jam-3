@@ -15,13 +15,15 @@ public class player : MonoBehaviour
     private const float DASH_TIME_KERNEL_MULTIPLIER = 0.1f;
     
     private const float JUMPING_POWER = 24f;
-    private const float DOUBLE_JUMP_BASE_POWER = 15f;
+    private const float DOUBLE_JUMP_BASE_POWER = 24f;
     
-    private const float SPEED = 14f;
+    private const float NORMAL_SPEED = 10f;
+    private const float DOUBLE_JUMP_SPEED = NORMAL_SPEED / 2;
+    private float SPEED = NORMAL_SPEED;
 
-    private const float DASH_POWER = 25f;
+    private const float DASH_POWER = 30f;
     private const float DASH_COOLDOWN = 0f;
-    private const float DASH_TIME = 0.3f;
+    private const float DASH_TIME = 0.5f;
 
     private const ushort MAX_KERNEL_USAGE = 3;
     private const ushort MIN_KERNEL_USAGE = 1;
@@ -124,6 +126,13 @@ public class player : MonoBehaviour
         if (Input.GetButtonDown("Jump") && !isGrounded() && _canDoubleJump && _kernelCount > _kernelsInUse)
         {
             _animator.SetBool("is surprised", true);
+
+            if (_rigidbody2D.velocity.x < 0) {
+                _rigidbody2D.velocity = new Vector2(-DOUBLE_JUMP_SPEED, _rigidbody2D.velocity.y);
+            } else {
+                _rigidbody2D.velocity = new Vector2(DOUBLE_JUMP_SPEED, _rigidbody2D.velocity.y);
+            }
+            SPEED = DOUBLE_JUMP_SPEED;
 
             _canDoubleJump = false;
 
@@ -233,6 +242,13 @@ public class player : MonoBehaviour
         _isDashing = false;
         _rigidbody2D.gravityScale = oldGravity;
         transform.eulerAngles = Vector3.zero;
+
+        if (_rigidbody2D.velocity.x < 0) {
+            _rigidbody2D.velocity = new Vector2(-NORMAL_SPEED, _rigidbody2D.velocity.y);
+        } else {
+            _rigidbody2D.velocity = new Vector2(NORMAL_SPEED, _rigidbody2D.velocity.y);
+        }
+
         yield return new WaitForSeconds(DASH_COOLDOWN);
 
         _canDash = true;
@@ -248,6 +264,7 @@ public class player : MonoBehaviour
             {
                 _animator.SetBool("is jumping", false);
                 _animator.SetBool("is surprised", false);
+                SPEED = NORMAL_SPEED;
             }
         }
         else if(other.gameObject.layer == (int) Mathf.Log(_placedObjectsLayer, 2f))
