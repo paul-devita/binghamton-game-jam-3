@@ -6,6 +6,7 @@ TagManager:
   tags:
   - poppedKernel
   - pickupKernel
+  - leaf
   layers:
   - Default
   - TransparentFX
