@@ -9,7 +9,7 @@ public class player : MonoBehaviour
     // CONSTANTS
     private const float GROUNDCHECK_RADIUS = 0.2f;
 
-    private const ushort DEFAULT_KERNEL_COUNT = 1000;
+    private const ushort DEFAULT_KERNEL_COUNT = 12;
     private const float DOUBLE_JUMP_KERNEL_MULTIPLIER = 0.275f;
     private const float DASH_POWER_KERNEL_MULTIPLIER = 0.25f;
     private const float DASH_TIME_KERNEL_MULTIPLIER = 0.1f;
@@ -55,12 +55,19 @@ public class player : MonoBehaviour
     [SerializeField] private GameObject _kernelProjectile;
     [SerializeField] private LayerMask _placedObjectsLayer;
 
-    [SerializeField] private ushort _kernelCount;
-    [SerializeField] private ushort _kernelsInUse;
+    [SerializeField] private int _kernelCount;
+    [SerializeField] private short _kernelsInUse;
     
 
     //Accessors
-    
+    public int getKernelCount() {
+        return _kernelCount;
+    }
+    public short getKernelsInUse() {
+        return _kernelsInUse;
+    }
+
+
     void Start()
     {
         _kernelCount = DEFAULT_KERNEL_COUNT;
