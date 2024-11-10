@@ -62,6 +62,8 @@ public class player : MonoBehaviour
     [SerializeField] private LayerMask _locustsLayer;
     [SerializeField] private UI _ui;
 
+    [SerializeField] private GameObject _deathScreen;
+
     [SerializeField] private int _kernelCount;
     [SerializeField] private short _kernelsInUse;
     
@@ -81,12 +83,16 @@ public class player : MonoBehaviour
         _kernelsInUse = 1;
         _animator = GetComponent<Animator>();
     }
-
     
     void Update()
     {
-        
-        
+        if (_isDead) return;
+
+        if (_kernelCount <= 0)
+        {
+            _isDead = true;
+            StartCoroutine(deathRoutine());
+        }
         
         if (_isDashing) return;
         
@@ -109,6 +115,8 @@ public class player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
+            _kernelCount--;
+            
             _ui.takeDamage(_kernelCount);
         }
 
@@ -163,6 +171,7 @@ public class player : MonoBehaviour
     // physics calculation calls (called at regular interval)
     private void FixedUpdate()
     {
+        if (_isDead) return;
         if (_isDashing) return;
         
         if (!isGrounded() && Math.Abs(_rigidbody2D.velocity.x) <= SPEED && _horizontalInput != 0)
@@ -312,5 +321,55 @@ public class player : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    private IEnumerator deathRoutine()
+    {
+        const int MASK_INDEX = 1;
+        
+        const float P1_DURATION = 0.5f;
+        const float P2_DURATION = 0.25f;
+
+        const float SUSPEND_DURATION = 1f;
+
+        const float P1_END_SIZE = 30f;
+
+        //Stop the player movement
+        _rigidbody2D.gravityScale = 0f;
+        _rigidbody2D.velocity = Vector2.zero;
+        
+        //Play Animation
+
+        GameObject deathScreen = Instantiate(_deathScreen, gameObject.transform);
+
+        deathScreen.transform.position = gameObject.transform.position;
+
+        Transform maskTransform = deathScreen.transform.GetChild(MASK_INDEX).transform;
+
+        float initScale = maskTransform.localScale.x;
+
+        for (float t = 0; t < P1_DURATION; t += Time.deltaTime)
+        {
+            float maskScale = Mathf.Lerp(initScale, P1_END_SIZE, t / P1_DURATION);
+
+            maskTransform.localScale = new Vector3(maskScale, maskScale, 0f);
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(SUSPEND_DURATION);
+        
+        initScale = maskTransform.localScale.x;
+
+        for (float t = 0f; t < P2_DURATION; t += Time.deltaTime)
+        {
+            float maskScale = Mathf.Lerp(initScale, 0f, t / P2_DURATION);
+
+            maskTransform.localScale = new Vector3(maskScale, maskScale, 0f);
+            
+            yield return null;
+        }
+        
+        Destroy(maskTransform.gameObject);
     }
 }

@@ -14,6 +14,8 @@ public class UI : MonoBehaviour
     
     private player _playerComponent;
 
+    [SerializeField] private Canvas _canvas;
+
     [SerializeField] private GameObject _kernelBar;
     [SerializeField] private GameObject _kernelUIObject;
     
@@ -139,6 +141,11 @@ public class UI : MonoBehaviour
         }
 
         _kernelsInUse = kernelsInUse;
+    }
+
+    public Canvas getCanvas()
+    {
+        return _canvas;
     }
     
     void Start()
