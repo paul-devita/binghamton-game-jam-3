@@ -28,8 +28,7 @@ public class player : MonoBehaviour
 
     private const byte ACTION_JUMP = 0;
     private const byte ACTION_DASH = 1;
-
-    private const string POPPED_KERNELS_TAG = "poppedKernel";
+    
     private const string PICKUP_KERNELS_TAG = "pickupKernel";
 
     
@@ -60,6 +59,8 @@ public class player : MonoBehaviour
     [SerializeField] private ushort _kernelsInUse;
     
 
+    //Accessors
+    
     void Start()
     {
         _kernelCount = DEFAULT_KERNEL_COUNT;
@@ -211,17 +212,6 @@ public class player : MonoBehaviour
         {
             switch (collision.gameObject.tag)
             {
-                case POPPED_KERNELS_TAG:
-                {
-                    const float POPPED_KERNEL_PUSH_SPEED = 1f;
-
-                    Rigidbody2D rb2D = collision.gameObject.GetComponentInParent<Rigidbody2D>();
-
-                    rb2D.velocity = new Vector2(POPPED_KERNEL_PUSH_SPEED * (_isFacingRight ? 1f : -1f),
-                        rb2D.velocity.y);
-                    
-                    break;
-                }
                 case PICKUP_KERNELS_TAG:
                 {
                     GameObject obj = collision.gameObject;
