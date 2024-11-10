@@ -20,45 +20,46 @@ public class UI : MonoBehaviour
     [SerializeField] private Sprite _kernelDefault;
     [SerializeField] private Sprite _kernelSelected;
     [SerializeField] private Sprite _kernelDanger;
+    [SerializeField] private Sprite _kernelDamage;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        GameObject playerObject = GameObject.Find(PLAYER_NAME);
-
-        _playerComponent = playerObject.GetComponent<player>();
-
-        _kernelCount = _playerComponent.getKernelCount();
-        _kernelsInUse = _playerComponent.getKernelsInUse();
-        
-        Debug.Log(_kernelCount);
-
-        for (int i = 0; i < _kernelCount; i++)
-        {
-            GameObject uiKernel = Instantiate(_kernelUIObject);
-            
-            uiKernel.transform.SetParent(_kernelBar.transform, false);
-            
-            Image kernelImage = uiKernel.GetComponent<Image>();
-
-            kernelImage.sprite = _kernelDefault;
-        }
-        
-        for (int i = _kernelBar.transform.childCount - _kernelsInUse; i < _kernelBar.transform.childCount; i++)
-        {
-            _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelSelected;
-        }
-    }
     
-    void Update()
+    
+    //Public methods
+    public void takeDamage(int newKernelCount)
     {
-        bool updatedUI = false;
+        if (newKernelCount >= _kernelCount)
+        {
+            Debug.LogWarning("attempted to take damage with higher count value");
+            return;
+        }
 
         int childCount = _kernelBar.transform.childCount;
         
-        int kernelCount = _playerComponent.getKernelCount();
-        short kernelsInUse = _playerComponent.getKernelsInUse();
+        int difference = _kernelCount - newKernelCount;
 
+        for (int i = _kernelBar.transform.childCount - 1; i >= _kernelBar.transform.childCount - difference; i--)
+        {
+            Destroy(_kernelBar.transform.GetChild(i).gameObject);
+
+            childCount--;
+        }
+            
+        for (int i = 0; i < childCount; i++)
+        {
+            _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDefault;
+        }
+        
+        _kernelCount = newKernelCount;
+        
+        StartCoroutine(indicateDamageRoutine());
+    }
+
+    public void updateKernelCount(int kernelCount)
+    {
+        if (kernelCount == _kernelCount) return;
+        
+        int childCount = _kernelBar.transform.childCount;
+        
         if (kernelCount > _kernelCount)
         {
             int difference = kernelCount - _kernelCount;
@@ -80,12 +81,8 @@ public class UI : MonoBehaviour
             {
                 _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDefault;
             }
-
-            updatedUI = true;
-            
-            _kernelCount = kernelCount;
         }
-        else if (kernelCount < _kernelCount)
+        else
         {
             int difference = _kernelCount - kernelCount;
 
@@ -100,39 +97,119 @@ public class UI : MonoBehaviour
             {
                 _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDefault;
             }
-            
-            updatedUI = true;
-            
-            _kernelCount = kernelCount;
         }
-
-        if (_kernelCount <= kernelsInUse)
+        
+        _kernelCount = kernelCount;
+        
+        if (_kernelCount <= _kernelsInUse)
         {
             for (int i = 0; i < childCount; i++)
             {
                 _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDanger;
             }
         }
-        else if (_kernelsInUse != kernelsInUse)
+        else 
         {
-            for (int i = 0; i < _kernelBar.transform.childCount; i++)
-            {
-                _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDefault;
-            }
-
-            for (int i = childCount - kernelsInUse; i < childCount; i++)
+            for (int i = childCount - _kernelsInUse; i < childCount; i++)
             {
                 _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelSelected;
             }
         }
-        else if (updatedUI)
+    }
+    public void updateKernelUsage(short kernelsInUse)
+    {
+        if (_kernelCount <= kernelsInUse)
         {
-            for (int i = childCount - kernelsInUse; i < childCount; i++)
+            for (int i = 0; i < _kernelBar.transform.childCount; i++)
+            {
+                _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDanger;
+            }
+
+            return;
+        }
+        
+        for (int i = 0; i < _kernelBar.transform.childCount; i++)
+        {
+            _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDefault;
+        }
+
+        for (int i = _kernelBar.transform.childCount - kernelsInUse; i < _kernelBar.transform.childCount; i++)
+        {
+            _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelSelected;
+        }
+
+        _kernelsInUse = kernelsInUse;
+    }
+    
+    void Start()
+    {
+        GameObject playerObject = GameObject.Find(PLAYER_NAME);
+
+        _playerComponent = playerObject.GetComponent<player>();
+
+        _kernelCount = _playerComponent.getKernelCount();
+        _kernelsInUse = _playerComponent.getKernelsInUse();
+
+        for (int i = 0; i < _kernelCount; i++)
+        {
+            GameObject uiKernel = Instantiate(_kernelUIObject);
+            
+            uiKernel.transform.SetParent(_kernelBar.transform, false);
+            
+            Image kernelImage = uiKernel.GetComponent<Image>();
+
+            kernelImage.sprite = _kernelDefault;
+        }
+        
+        
+        for (int i = _kernelBar.transform.childCount - _kernelsInUse; i < _kernelBar.transform.childCount; i++)
+        {
+            _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelSelected;
+        }
+    }
+    
+    private IEnumerator indicateDamageRoutine()
+    {
+        for (int i = 0; i < _kernelBar.transform.childCount; i++)
+        {
+            _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDamage;
+        }
+
+        yield return new WaitForSeconds(0.4f);
+ 
+        for (int i = 0; i < _kernelBar.transform.childCount; i++)
+        {
+            _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDefault;
+        }
+
+        yield return new WaitForSeconds(0.1f);
+        
+        for (int i = 0; i < _kernelBar.transform.childCount; i++)
+        {
+            _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDamage;
+        }
+
+        yield return new WaitForSeconds(0.4f);
+        
+        for (int i = 0; i < _kernelBar.transform.childCount; i++)
+        {
+            _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDefault;
+        }
+        
+        if (_kernelCount <= _kernelsInUse)
+        {
+            for (int i = 0; i < _kernelBar.transform.childCount; i++)
+            {
+                _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelDanger;
+            }
+        }
+        else
+        {
+            for (int i = _kernelBar.transform.childCount - _kernelsInUse; i < _kernelBar.transform.childCount; i++)
             {
                 _kernelBar.transform.GetChild(i).GetComponent<Image>().sprite = _kernelSelected;
             }
         }
         
-        _kernelsInUse = kernelsInUse;
     }
 }
