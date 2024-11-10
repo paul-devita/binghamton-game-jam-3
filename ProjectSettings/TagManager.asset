@@ -59,9 +59,6 @@ TagManager:
   - name: stem 3
     uniqueID: 2010324841
     locked: 0
-  - name: locusts
-    uniqueID: 2010762723
-    locked: 0
   - name: kernel
     uniqueID: 1240923417
     locked: 0
@@ -70,6 +67,9 @@ TagManager:
     locked: 0
   - name: player
     uniqueID: 1876961903
+    locked: 0
+  - name: locusts
+    uniqueID: 2010762723
     locked: 0
   - name: UI
     uniqueID: 1251296371
