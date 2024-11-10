@@ -19,7 +19,7 @@ public class player : MonoBehaviour
     
     private const float SPEED = 14f;
 
-    private const float DASH_POWER = 24f;
+    private const float DASH_POWER = 25f;
     private const float DASH_COOLDOWN = 0f;
     private const float DASH_TIME = 0.3f;
 
