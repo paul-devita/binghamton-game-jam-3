@@ -14,7 +14,7 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - locusts
   - placedObjects
   - 
   - 
@@ -42,6 +42,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: locusts
+    uniqueID: 2010762723
+    locked: 0
+  - name: kernel
+    uniqueID: 1240923417
     locked: 0
   - name: ground
     uniqueID: 2210784399

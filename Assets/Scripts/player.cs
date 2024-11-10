@@ -31,9 +31,13 @@ public class player : MonoBehaviour
     
     private const string PICKUP_KERNELS_TAG = "pickupKernel";
 
+    private const float LOCUST_DAMAGE_TIME = 4f;
+
     
     // general vars
     private float _horizontalInput;
+
+    private float _locustTimer;
 
     private bool _isFacingRight = true;
     
@@ -41,8 +45,6 @@ public class player : MonoBehaviour
 
     private bool _isDashing = false;
     private bool _canDash = true;
-    
-    private bool _isStationary = true;
 
 
     // serialize fields
@@ -54,6 +56,9 @@ public class player : MonoBehaviour
     [SerializeField] private Transform _kernalProjectileSpawnLocation;
     [SerializeField] private GameObject _kernelProjectile;
     [SerializeField] private LayerMask _placedObjectsLayer;
+
+    [SerializeField] private LayerMask _locustsLayer;
+    [SerializeField] private UI _ui;
 
     [SerializeField] private int _kernelCount;
     [SerializeField] private short _kernelsInUse;
@@ -87,10 +92,19 @@ public class player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && _kernelsInUse < MAX_KERNEL_USAGE)
         {
             _kernelsInUse++;
+            
+            _ui.updateKernelUsage(_kernelsInUse);
         }
         else if (Input.GetKeyDown(KeyCode.Q) && _kernelsInUse > MIN_KERNEL_USAGE)
         {
             _kernelsInUse--;
+            
+            _ui.updateKernelUsage(_kernelsInUse);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            _ui.takeDamage(_kernelCount);
         }
 
         //Jumping Behavior
@@ -115,8 +129,11 @@ public class player : MonoBehaviour
 
             _kernelCount -= _kernelsInUse;
             
+            _ui.updateKernelCount(_kernelCount);
+            
             for(int i = 0; i < _kernelsInUse; i++)
                 createKernelProjectile(ACTION_JUMP, _isFacingRight);
+            
 
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x,
                 DOUBLE_JUMP_BASE_POWER * (1f + (_kernelsInUse - 1) * DOUBLE_JUMP_KERNEL_MULTIPLIER));
@@ -126,6 +143,11 @@ public class player : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift) && _canDash && !isGrounded() && _kernelCount > _kernelsInUse)
         {
             _animator.SetBool("is surprised", true);
+            
+            _kernelCount -= _kernelsInUse;
+        
+            _ui.updateKernelCount(_kernelCount);
+            
             StartCoroutine(dash());
         }
         
@@ -138,7 +160,20 @@ public class player : MonoBehaviour
     {
         if (_isDashing) return;
         
-        _rigidbody2D.velocity = new Vector2(_horizontalInput * SPEED, _rigidbody2D.velocity.y);
+        if (!isGrounded() && Math.Abs(_rigidbody2D.velocity.x) <= SPEED && _horizontalInput != 0)
+        {
+            float resistance = 0.5f;
+            float velocity = _rigidbody2D.velocity.x + (_horizontalInput * resistance);
+            if (Math.Abs(velocity) > SPEED)
+            {
+                velocity = _horizontalInput * SPEED;
+            }
+            _rigidbody2D.velocity = new Vector2(velocity, _rigidbody2D.velocity.y);
+        }
+        else if(isGrounded())
+        {
+            _rigidbody2D.velocity = new Vector2(_horizontalInput * SPEED, _rigidbody2D.velocity.y);
+        }
         
         _animator.SetFloat("x velocity", Math.Abs(_rigidbody2D.velocity.x));
         _animator.SetFloat("y velocity", _rigidbody2D.velocity.y);
@@ -156,7 +191,6 @@ public class player : MonoBehaviour
         if (_isFacingRight && _horizontalInput < 0f || !_isFacingRight && _horizontalInput > 0f)
         {
             _isFacingRight = !_isFacingRight;
-            _isStationary = false;
 
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
@@ -185,8 +219,6 @@ public class player : MonoBehaviour
         
         _canDash = false;
         _isDashing = true;
-
-        _kernelCount -= _kernelsInUse;
         
         for(int i = 0; i < _kernelsInUse; i++)
             createKernelProjectile(ACTION_DASH, _isFacingRight);
@@ -208,28 +240,57 @@ public class player : MonoBehaviour
 
 
     // called when player trigger collides with an object. Player trigger is currently the capsule 2D collider
-    void OnTriggerEnter2D(Collider2D collision) 
+    void OnTriggerEnter2D(Collider2D other) 
     {
-        if (collision.gameObject.layer == (int) Mathf.Log(_groundLayer, 2f))
+        if (other.gameObject.layer == (int) Mathf.Log(_groundLayer, 2f))
         {
-            _animator.SetBool("is jumping", false);
-            _animator.SetBool("is surprised", false);
+            if (_rigidbody2D.velocity.y <= 0)
+            {
+                _animator.SetBool("is jumping", false);
+                _animator.SetBool("is surprised", false);
+            }
         }
-        else if(collision.gameObject.layer == (int) Mathf.Log(_placedObjectsLayer, 2f))
+        else if(other.gameObject.layer == (int) Mathf.Log(_placedObjectsLayer, 2f))
         {
-            switch (collision.gameObject.tag)
+            switch (other.gameObject.tag)
             {
                 case PICKUP_KERNELS_TAG:
                 {
-                    GameObject obj = collision.gameObject;
-                    
-                    if(_kernelCount < DEFAULT_KERNEL_COUNT)
+                    GameObject obj = other.gameObject;
+
+                    if (_kernelCount < DEFAULT_KERNEL_COUNT)
+                    {
                         _kernelCount++;
+                        _ui.updateKernelCount(_kernelCount);
+                    }
 
                     Destroy(obj);
                     
                     break;
                 }
+            }
+        }
+        else if (other.gameObject.layer == (int)Mathf.Log(_locustsLayer, 2f))
+        {
+            _locustTimer = 0f;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.layer == (int)Mathf.Log(_locustsLayer, 2f))
+        {
+            Debug.LogWarning(_locustTimer);
+            
+            _locustTimer += Time.deltaTime;
+
+            if (_locustTimer >= LOCUST_DAMAGE_TIME)
+            {
+                _locustTimer = 0f;
+
+                _kernelCount--;
+
+                _ui.takeDamage(_kernelCount);
             }
         }
     }
