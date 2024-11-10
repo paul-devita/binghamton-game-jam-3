@@ -14,7 +14,7 @@ TagManager:
   - player
   - Water
   - UI
-  - 
+  - background
   - locusts
   - placedObjects
   - 
@@ -47,6 +47,9 @@ TagManager:
   - name: background
     uniqueID: 4243750767
     locked: 0
+  - name: clouds
+    uniqueID: 2774777025
+    locked: 0
   - name: stem 1
     uniqueID: 2057146739
     locked: 0
@@ -67,4 +70,7 @@ TagManager:
     locked: 0
   - name: player
     uniqueID: 1876961903
+    locked: 0
+  - name: UI
+    uniqueID: 1251296371
     locked: 0
