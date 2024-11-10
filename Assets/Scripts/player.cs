@@ -68,6 +68,8 @@ public class player : MonoBehaviour
 
     [SerializeField] private int _kernelCount;
     [SerializeField] private short _kernelsInUse;
+
+    [SerializeField] private GameObject _locusts;
     
 
     //Accessors
