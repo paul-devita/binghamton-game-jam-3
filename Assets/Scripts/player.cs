@@ -2,11 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class player : MonoBehaviour
 {
 
     // CONSTANTS
+    private const string GAME_SCENE = "game";
+    private const string END_SCENE = "end";
+    
     private const float GROUNDCHECK_RADIUS = 0.2f;
 
     private const ushort DEFAULT_KERNEL_COUNT = 12;
@@ -117,13 +121,6 @@ public class player : MonoBehaviour
             _kernelsInUse--;
             
             _ui.updateKernelUsage(_kernelsInUse);
-        }
-
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            _kernelCount--;
-            
-            _ui.takeDamage(_kernelCount);
         }
 
         //Jumping Behavior
@@ -392,5 +389,9 @@ public class player : MonoBehaviour
         }
         
         Destroy(maskTransform.gameObject);
+
+        SceneManager.LoadSceneAsync(END_SCENE);
+
+        SceneManager.UnloadSceneAsync(GAME_SCENE);
     }
 }
