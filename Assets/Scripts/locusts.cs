@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class locusts : MonoBehaviour
 {
-    private const float LOCUST_SPEED = 0.001f;
+    private const float LOCUST_SPEED = 0.01f;
 
     [SerializeField] private Rigidbody2D _rigidbody2D; 
 
@@ -15,9 +15,9 @@ public class locusts : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        transform.position = new Vector2(transform.position.x, transform.position.y + LOCUST_SPEED);
+        transform.position = new Vector3(transform.position.x, transform.position.y + LOCUST_SPEED, 0f);
     }
 
     public void Restart() {
