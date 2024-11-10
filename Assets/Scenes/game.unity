@@ -3424,8 +3424,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2057146739
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b49ff42fbc79c4044a1c8c9735163182, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4691,8 +4691,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2057146739
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b49ff42fbc79c4044a1c8c9735163182, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -8444,8 +8444,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2057146739
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2d62ccb7bd33e544bbfa065e177a7b74, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -10238,8 +10238,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2057146739
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2a4e6633e7514c248a1ed8fad859c984, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -14279,11 +14279,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2073435790161602983, guid: 83b4667724c1f3a49919d7279573dca6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.1
+      value: -12.4
       objectReference: {fileID: 0}
     - target: {fileID: 2073435790161602983, guid: 83b4667724c1f3a49919d7279573dca6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.5
+      value: -1.8
       objectReference: {fileID: 0}
     - target: {fileID: 2073435790161602983, guid: 83b4667724c1f3a49919d7279573dca6, type: 3}
       propertyPath: m_LocalPosition.z

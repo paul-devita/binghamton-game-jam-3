@@ -94,6 +94,7 @@ public class player : MonoBehaviour
         if (_kernelCount <= 0)
         {
             _isDead = true;
+            _animator.SetBool("died", true);
             StartCoroutine(deathRoutine());
         }
 
