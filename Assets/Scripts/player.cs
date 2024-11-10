@@ -55,16 +55,23 @@ public class player : MonoBehaviour
     [SerializeField] private GameObject _kernelProjectile;
     [SerializeField] private LayerMask _placedObjectsLayer;
 
-    [SerializeField] private ushort _kernelCount;
-    [SerializeField] private ushort _kernelsInUse;
+    [SerializeField] private int _kernelCount = 12;
+    [SerializeField] private short _kernelsInUse;
     
 
     //Accessors
+    public int getKernelCount()
+    {
+        return _kernelCount;
+    }
+
+    public short getKernelsInUse()
+    {
+        return _kernelsInUse;
+    }
     
     void Start()
     {
-        _kernelCount = DEFAULT_KERNEL_COUNT;
-        _kernelsInUse = 1;
         _animator = GetComponent<Animator>();
     }
 
